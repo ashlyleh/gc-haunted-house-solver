@@ -5,51 +5,63 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Haunted House Solver</title>
   <meta name="description" content="Pick the clues you found and see which suspect and weapon they point to.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Instrument+Serif:ital@0;1&family=Jolly+Lodger&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
-  <header class="top">
-    <div class="wrap top-inner">
-      <div>
-        <h1>🎃 Haunted House Solver</h1>
-        <p class="sub" id="subtitle">Check the clues you found. The culprit and weapon appear on the right.</p>
+  <div class="page">
+    <header class="banner">
+      <div class="brand">
+        <img class="brand-img" src="https://grundoscafe.b-cdn.net/events/hauntedhouse/eliv_transp.png" alt="">
+        <h1>Haunted House Solver</h1>
       </div>
-      <div class="controls">
-        <label class="year-pick">Year
-          <select id="yearSelect" aria-label="Choose year"></select>
-        </label>
-        <button type="button" id="resetBtn" class="btn">Reset clues</button>
-        <label class="btn btn-ghost" for="uploadInput" title="Load your own clue spreadsheet (CSV)">Upload CSV</label>
-        <input type="file" id="uploadInput" accept=".csv,text/csv" hidden>
-      </div>
-    </div>
-  </header>
+      <label class="year-pick">
+        <span class="sr-only">Choose year</span>
+        <select id="yearSelect"></select>
+      </label>
+    </header>
 
-  <main class="wrap" id="app">
+    <nav id="nav" class="nav" aria-label="Haunted House links"></nav>
+
+    <p class="contact">If you have any questions, clues to share or concerns about the solver reach out to <b><i>Ashadee</i></b></p>
+    <p id="updated" class="updated" hidden></p>
+
     <div id="notice" class="notice" hidden></div>
 
-    <div class="layout">
-      <section class="panel" aria-labelledby="cluesHeading">
-        <h2 id="cluesHeading">1. Your clues</h2>
-        <p class="hint">Tick every clue you were given. Final clue and weapon clue: pick only one of each.</p>
+    <main class="layout" id="app">
+      <aside class="col-results" aria-live="polite">
+        <section class="panel" aria-labelledby="culpritHeading">
+          <h2 id="culpritHeading">Your Culprit is...</h2>
+          <div id="suspectGrid" class="card-grid"></div>
+          <p id="culpritNote" class="culprit-note" hidden></p>
+          <p id="selectedLine" class="selected-line"></p>
+        </section>
+
+        <section class="panel" id="weaponPanel" aria-labelledby="weaponHeading">
+          <h2 id="weaponHeading">Weapon Used...</h2>
+          <div id="weaponGrid" class="card-grid"></div>
+        </section>
+
+        <section class="panel disclaimer">
+          <h2>Disclaimer</h2>
+          <p>Use this solver at your own risk. I'm human and can make mistakes, so use this guide as a starting off point to help you narrow down your possible culprit. Make sure to get your clue each day. Missing one, especially the last day could mean you miss your weapon or specific clue. Have fun and thank you!</p>
+        </section>
+      </aside>
+
+      <section class="panel clues" aria-labelledby="cluesHeading">
+        <div class="clues-head">
+          <h2 id="cluesHeading">Your Clues</h2>
+          <p>Select every clue you were given. For full credits make sure you collect a clue each day!</p>
+          <button type="button" id="resetBtn" class="reset">Reset</button>
+        </div>
         <div id="clueGroups"></div>
       </section>
+    </main>
+  </div>
 
-      <aside class="panel results" aria-live="polite" aria-labelledby="resultsHeading">
-        <h2 id="resultsHeading">2. Your answer</h2>
-        <div id="culprit"></div>
-        <div id="weapon"></div>
-        <h3>All suspects</h3>
-        <ul id="suspectList" class="suspects"></ul>
-      </aside>
-    </div>
-  </main>
-
-  <footer class="wrap foot">
-    <p>Data for each year lives in <code>data/</code>. New year? See the README, or use <b>Upload CSV</b> to try a spreadsheet without publishing it.
-       <a href="templates/blank-template.csv" download>Download the blank template</a>.</p>
-  </footer>
-
+  <script src="assets/common.js"></script>
   <script src="assets/app.js"></script>
 </body>
 </html>

@@ -17,8 +17,6 @@ Test locally: `python3 -m http.server` in this folder, then open http://localhos
 3. Replace `data/2026.csv` with it and commit.
 4. To add another year, add a line to `data/years.json` and drop in `data/<year>.csv`.
 
-To test a sheet first without publishing, use **Upload CSV** on the page.
-
 ## CSV format
 Rows 1-4 describe the clues. One column per clue.
 
@@ -41,3 +39,17 @@ The Suspect Calculator differed for:
 
 Also fixed: "Beard Coam" to "Beard Comb", and the Neopet anagram to `PEENTO` (the Quick Guide and Calculator had `PENNTO`).
 If the calculator was right, edit `data/2025.csv`.
+
+## Images
+Images live in `data/<year>.assets.json` (suspect photo + species, clue icons, weapon images, display order).
+For a new year, copy `data/2025.assets.json`, swap the URLs, and add `"assets": "data/2026.assets.json"` to that year's line in `data/years.json`.
+Clue icons are matched by the clue name in the CSV, so spell them the same.
+
+## Buttons + Past Prizes
+The button row above the solver comes from `data/nav.json`.
+- **Add a link:** add `{ "label": "...", "url": "..." }` to `links`.
+- **Add a past-prizes year:** save the prizes as `data/prizes/<year>.csv` (columns: `Type, Image URL, Name, Nipots Cost, URL`), then change that year's line in `prizes` from `{ "year": 2023, "soon": true }` to `{ "year": 2023, "file": "data/prizes/2023.csv" }`.
+
+## "Last updated" note
+Shown under the contact line for the selected year. To change it, edit that year's `"updated"` value in `data/years.json`, e.g. `"2026-10-18T09:30:00-05:00"` (the `-05:00` is Central Daylight Time; use `-06:00` after clocks fall back in November).
+Visitors see it converted to their own time zone. Leave `updated` out and nothing is shown.

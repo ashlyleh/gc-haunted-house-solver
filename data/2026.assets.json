@@ -1,0 +1,16 @@
+{
+  "intro": "Select every clue you were given. For full credits make sure you collect a clue each day!",
+  "categoryNotes": {
+    "Final Clues": "This is the last clue you should receive on the final day. This should help confirm the suspect.",
+    "Weapons": "This clue should narrow down the weapon used by your suspect, this doesn't usually relate to the suspect."
+  },
+  "clueIcons": {
+    "Enormous Toenail": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/uniqueclue_enormoustoenail.png",
+    "Wheel Shards": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/uniqueClue_wheelShards.png",
+    "Baking Soda": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/weaponClue_bakingSoda.png",
+    "Brown Hair": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/clue_brownhair.png",
+    "Shoe Prints": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/clue_shoeprints.png"
+  },
+  "suspects": {},
+  "weapons": {}
+}

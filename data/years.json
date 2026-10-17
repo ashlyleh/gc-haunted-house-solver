@@ -1,5 +1,16 @@
 [
-  { "year": 2026, "file": "data/2026.csv", "title": "2026 Haunted House", "default": true },
-  { "year": 2025, "file": "data/2025.csv", "title": "2025 Haunted House",
-    "note": "Built from the 2025 guide. Lady Frostbite's Magic User and Taelia's Pants were marked 'possibly' in the original, so they show as uncertain." }
+  {
+    "year": 2026,
+    "file": "data/2026.csv",
+    "assets": "data/2026.assets.json",
+    "title": "2026 Haunted House",
+    "default": true,
+    "updated": "2026-10-17T18:09:00-05:00"
+  },
+  {
+    "year": 2025,
+    "file": "data/2025.csv",
+    "assets": "data/2025.assets.json",
+    "title": "2025 Haunted House"
+  }
 ]

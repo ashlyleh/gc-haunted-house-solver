@@ -1,0 +1,86 @@
+{
+  "intro": "Select every clue you were given. For full credits make sure you collect a clue each day!",
+  "suspectOrder": [
+    "Armin",
+    "Taelia",
+    "Donny",
+    "Happy Icy Lenny",
+    "Lady Frostbite",
+    "Mr. Chipper"
+  ],
+  "weaponOrder": [
+    "Candy Club",
+    "Seasonal Attack Pea",
+    "Fire and Ice Blade",
+    "Block of Ice",
+    "Blizzard Ring",
+    "Yellow Snowball"
+  ],
+  "categoryIcons": {
+    "Anagrams": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/letter.png"
+  },
+  "categoryNotes": {
+    "Final Clues": "This is the last clue you should receive on the final day. This should help confirm the suspect.",
+    "Weapons": "This clue should narrow down the weapon used by your suspect, this doesn't usually relate to the suspect."
+  },
+  "suspects": {
+    "Armin": {
+      "image": "https://grundoscafe.b-cdn.net/events/hauntedhouse/guests/24.png",
+      "species": "Snowager"
+    },
+    "Taelia": {
+      "image": "https://grundoscafe.b-cdn.net/events/hauntedhouse/guests/23.png",
+      "species": "Wish Witch"
+    },
+    "Donny": {
+      "image": "https://grundoscafe.b-cdn.net/events/hauntedhouse/guests/22.png",
+      "species": "Werelupe"
+    },
+    "Happy Icy Lenny": {
+      "image": "https://grundoscafe.b-cdn.net/events/hauntedhouse/guests/21.png",
+      "species": "Baelia"
+    },
+    "Lady Frostbite": {
+      "image": "https://grundoscafe.b-cdn.net/events/hauntedhouse/guests/20.png",
+      "species": "Snow Beast"
+    },
+    "Mr. Chipper": {
+      "image": "https://grundoscafe.b-cdn.net/events/hauntedhouse/guests/19.png",
+      "species": "Nigel (with car)"
+    }
+  },
+  "clueIcons": {
+    "Black Lipstick": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/clue_blacklipstick.png",
+    "Blue Ribbon": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/clue_blueribbon.png",
+    "Beard Comb": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/clue_beardcomb.png",
+    "Ice Cream Ticket": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/clue_icecreamticket.png",
+    "Timeworn Slingshot": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/clue_timewornslingshot.png",
+    "Yellow Feather": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/clue_yellowfeather.png",
+    "Chill Wind": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/clue_chillwind.png",
+    "Ice Chips": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/clue_icechips.png",
+    "Minty Fragment": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/clue_mintyfragment.png",
+    "Magical Puddle of Water": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/clue_magicalpuddle.png",
+    "Tiny Festive Hat": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/clue_tinyfestivecap.png",
+    "Innocuous Yellow Slush": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/clue_yellowslush.png",
+    "Blue Fabric": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/clue_bluefabricscrap.png",
+    "Dark Fabric": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/clue_darkfabricscrap.png",
+    "Light Blue Fabric": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/clue_lightbluefabricscrap.png",
+    "Red Fabric": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/clue_redfabricscrap.png",
+    "Hair Gel Residue": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/clue_hairgelresidue.png",
+    "Oval Footprints": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/clue_ovalfootprints.png",
+    "Pointy Tooth": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/clue_pointytooth.png",
+    "Rope": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/clue_rope.png",
+    "Black Hair": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/clue_blackhair.png",
+    "Blue Hair": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/clue_bluehair.png",
+    "Pink Hair": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/clue_pinkhair.png",
+    "White Hair": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/clue_whitehair.png"
+  },
+  "weapons": {
+    "Candy Club": "https://grundoscafe.b-cdn.net/items/bd_candyclub.gif",
+    "Seasonal Attack Pea": "https://grundoscafe.b-cdn.net/items/seasonal_pea.gif",
+    "Fire and Ice Blade": "https://grundoscafe.b-cdn.net/items/bd_icefire_blade.gif",
+    "Block of Ice": "https://grundoscafe.b-cdn.net/items/bd_snowbeast_iceboulder.gif",
+    "Blizzard Ring": "https://grundoscafe.b-cdn.net/items/snowfaerie_blizzardring.gif",
+    "Yellow Snowball": "https://grundoscafe.b-cdn.net/items/snowball_4.gif"
+  }
+}

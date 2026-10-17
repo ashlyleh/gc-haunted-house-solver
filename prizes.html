@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Haunted House Past Prizes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Instrument+Serif:ital@0;1&family=Jolly+Lodger&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="prizes">
+  <div class="page">
+    <header class="banner">
+      <div class="brand">
+        <img class="brand-img" src="https://grundoscafe.b-cdn.net/events/hauntedhouse/eliv_transp.png" alt="">
+        <h1 id="prizeTitle">Past Prizes</h1>
+      </div>
+    </header>
+
+    <nav id="nav" class="nav" aria-label="Haunted House links"></nav>
+
+    <div id="notice" class="notice" hidden></div>
+    <main class="panel" id="prizePanel" hidden>
+      <div class="sort-bar">
+        <span class="nav-label">Sort by</span>
+        <button type="button" class="sort-btn" data-sort="type">Type</button>
+        <button type="button" class="sort-btn" data-sort="name">A-Z</button>
+        <button type="button" class="sort-btn" data-sort="cost">Cost</button>
+      </div>
+      <div id="prizeGrid" class="prize-grid"></div>
+    </main>
+  </div>
+
+  <script src="assets/common.js"></script>
+  <script src="assets/prizes.js"></script>
+</body>
+</html>

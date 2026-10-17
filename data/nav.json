@@ -1,0 +1,27 @@
+{
+  "links": [
+    {
+      "label": "Haunted House",
+      "url": "https://grundos.cafe/halloween/haunted_house"
+    }
+  ],
+  "prizesLabel": "Past Prizes",
+  "prizes": [
+    {
+      "year": 2025,
+      "file": "data/prizes/2025.csv"
+    },
+    {
+      "year": 2024,
+      "file": "data/prizes/2024.csv"
+    },
+    {
+      "year": 2023,
+      "soon": true
+    },
+    {
+      "year": 2022,
+      "soon": true
+    }
+  ]
+}

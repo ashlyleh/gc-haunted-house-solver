@@ -1,35 +1,15 @@
 /* Haunted House Solver
- * Loads a clue spreadsheet (CSV) for a chosen year and narrows down suspects.
- * CSV format is documented in README.md. */
+ * Loads a clue spreadsheet (CSV) + optional image file for the chosen year,
+ * then narrows down suspects and weapon. Format is documented in README.md. */
 (function () {
   "use strict";
 
   const $ = (id) => document.getElementById(id);
-  const state = { years: [], year: null, data: null, selected: new Set(), custom: false };
+  const state = { years: [], year: null, data: null, assets: {}, selected: new Set() };
 
-  /* ---------- CSV parsing ---------- */
-  function parseCSV(text) {
-    const rows = [];
-    let row = [], cell = "", inQ = false;
-    text = text.replace(/^﻿/, "");
-    for (let i = 0; i < text.length; i++) {
-      const c = text[i];
-      if (inQ) {
-        if (c === '"') {
-          if (text[i + 1] === '"') { cell += '"'; i++; } else inQ = false;
-        } else cell += c;
-      } else if (c === '"') inQ = true;
-      else if (c === ",") { row.push(cell); cell = ""; }
-      else if (c === "\n" || c === "\r") {
-        if (c === "\r" && text[i + 1] === "\n") i++;
-        row.push(cell); rows.push(row); row = []; cell = "";
-      } else cell += c;
-    }
-    if (cell !== "" || row.length) { row.push(cell); rows.push(row); }
-    return rows.map((r) => r.map((v) => v.trim()));
-  }
+  const { parseCSV, el } = window.HH;
 
-  /* Turn the matrix CSV into { categories, suspects } */
+  /* Turn the matrix CSV into { categories, suspects, clues } */
   function buildData(rows) {
     const meta = {};
     const suspectRows = [];
@@ -40,9 +20,7 @@
     }
     if (!meta.category || !meta.clue) throw new Error('The CSV needs a "category" row and a "clue" row.');
 
-    const categories = [];
-    const byName = {};
-    const clues = {};
+    const categories = [], byName = {}, clues = {};
     meta.clue.forEach((label, col) => {
       if (col === 0 || !label) return;
       const catName = meta.category[col] || "Other";
@@ -51,11 +29,7 @@
         const cat = { name: catName, kind: low.includes("weapon") ? "weapon" : low.includes("final") ? "final" : "normal", clues: [] };
         byName[catName] = cat; categories.push(cat);
       }
-      const clue = {
-        id: "c" + col, label,
-        hint: (meta.hint && meta.hint[col]) || "",
-        weapon: (meta.weapon && meta.weapon[col]) || ""
-      };
+      const clue = { id: "c" + col, label, cat: byName[catName], hint: (meta.hint && meta.hint[col]) || "", weapon: (meta.weapon && meta.weapon[col]) || "" };
       byName[catName].clues.push(clue);
       clues[clue.id] = clue;
     });
@@ -63,8 +37,7 @@
     const suspects = suspectRows.map((r) => {
       const has = new Set(), maybe = new Set();
       Object.keys(clues).forEach((id) => {
-        const col = Number(id.slice(1));
-        const v = (r[col] || "").toLowerCase();
+        const v = (r[Number(id.slice(1))] || "").toLowerCase();
         if (!v) return;
         if (v === "?" || v === "~" || v === "maybe") { has.add(id); maybe.add(id); }
         else if (!["0", "false", "no", "n"].includes(v)) has.add(id);
@@ -74,37 +47,48 @@
     return { categories, suspects, clues };
   }
 
+  /* ---------- helpers ---------- */
+  const isWeaponClue = (id) => state.data.clues[id] && state.data.clues[id].cat.kind === "weapon";
+  const A = () => state.assets || {};
+
+  /* Image with a soft placeholder if the URL is missing or fails */
+  function pic(url, cls, fallbackText) {
+    const ph = () => el("div", { class: cls === "ico" ? "ico-ph" : "ph", text: cls === "ico" ? "" : (fallbackText || "?").charAt(0) });
+    if (!url) return ph();
+    const img = el("img", { src: url, alt: "", class: cls, loading: "lazy" });
+    img.addEventListener("error", () => img.replaceWith(ph()));
+    return img;
+  }
+  /* "Blue Fabric" -> "Blue" inside Fabrics / Hair groups */
+  function shortLabel(clue) {
+    const n = clue.cat.name.toLowerCase();
+    return n.includes("fabric") || n.includes("hair") ? clue.label.replace(/\s+(Fabric|Fabric Scrap|Hair)$/i, "") : clue.label;
+  }
+  function ordered(list, order, nameOf) {
+    if (!order || !order.length) return list;
+    const rank = (x) => { const i = order.indexOf(nameOf(x)); return i < 0 ? 999 : i; };
+    return [...list].sort((a, b) => rank(a) - rank(b));
+  }
+
   /* ---------- solving ---------- */
   function solve() {
-    const { data, selected } = state;
-    const picked = [...selected].filter((id) => data.clues[id] && !isWeaponClue(id));
-    return data.suspects.map((s) => {
+    const picked = [...state.selected].filter((id) => state.data.clues[id] && !isWeaponClue(id));
+    return state.data.suspects.map((s) => {
       const missing = picked.filter((id) => !s.has.has(id));
       const unsure = picked.filter((id) => s.maybe.has(id));
       return { s, missing, unsure, ok: missing.length === 0 };
     });
   }
-  function isWeaponClue(id) {
-    return state.data.categories.some((c) => c.kind === "weapon" && c.clues.some((k) => k.id === id));
-  }
 
-  /* ---------- rendering ---------- */
-  const el = (tag, attrs = {}, ...kids) => {
-    const n = document.createElement(tag);
-    for (const [k, v] of Object.entries(attrs)) {
-      if (k === "class") n.className = v; else if (k === "text") n.textContent = v; else n.setAttribute(k, v);
-    }
-    kids.forEach((k) => n.append(k));
-    return n;
-  };
-
+  /* ---------- rendering: clue picker ---------- */
   function renderClues() {
     const host = $("clueGroups");
     host.replaceChildren();
+    const notes = A().categoryNotes || {};
     state.data.categories.forEach((cat) => {
       const exclusive = cat.kind !== "normal";
-      const fs = el("fieldset", {}, el("legend", { text: cat.name }));
-      if (exclusive) fs.firstChild.append(el("small", { text: "pick one" }));
+      const head = el("div", { class: "group-head" }, el("h3", { text: cat.name }));
+      if (notes[cat.name]) head.append(el("p", { text: notes[cat.name] }));
       const chips = el("div", { class: "chips" });
       cat.clues.forEach((cl) => {
         const input = el("input", { type: "checkbox", value: cl.id });
@@ -117,67 +101,65 @@
           if (exclusive) renderClues();
           save(); renderResults();
         });
-        const span = el("span", { text: cl.label });
-        if (cl.hint) span.append(el("small", { text: cl.hint }));
-        chips.append(el("label", { class: "chip" }, input, span));
+        const iconUrl = (A().clueIcons || {})[cl.label] || (A().categoryIcons || {})[cat.name];
+        const txt = el("span", { class: "txt" });
+        if (cl.hint) { txt.append(el("span", { class: "main", text: cl.hint }), el("span", { class: "small", text: cl.label })); }
+        else txt.append(el("span", { class: "main", text: shortLabel(cl) }));
+        chips.append(el("label", { class: "chip" + (cl.hint ? " anagram" : "") }, input, el("span", { class: "chip-body" }, pic(iconUrl, "ico"), txt)));
       });
-      fs.append(chips);
-      host.append(fs);
+      host.append(el("div", { class: "group" }, head, chips));
     });
   }
 
+  /* ---------- rendering: suspects, weapons, summary ---------- */
   function renderResults() {
     const results = solve();
-    const anyPicked = [...state.selected].some((id) => !isWeaponClue(id));
+    const picked = [...state.selected].filter((id) => !isWeaponClue(id));
+    const anyPicked = picked.length > 0;
     const alive = results.filter((r) => r.ok);
-    const culprit = $("culprit");
-    culprit.replaceChildren();
+    const assets = A();
 
-    if (!anyPicked) {
-      culprit.append(answer("Your culprit is…", "Pick some clues", "", ""));
-    } else if (alive.length === 1) {
-      const r = alive[0];
-      const note = r.unsure.length ? "Heads up: this match relies on a clue marked as uncertain (" + r.unsure.map(lbl).join(", ") + ")." : "Every clue you picked matches this suspect.";
-      culprit.append(answer("Your culprit is…", r.s.name, "found", note));
-    } else if (alive.length > 1) {
-      culprit.append(answer("Still narrowing down", alive.length + " suspects left", "", "Check more clues, especially your final clue, to narrow it to one."));
-    } else {
+    /* suspects */
+    const grid = $("suspectGrid");
+    grid.replaceChildren();
+    ordered(results, assets.suspectOrder, (r) => r.s.name).forEach((r) => {
+      const info = (assets.suspects || {})[r.s.name] || {};
+      const cls = "card" + (!anyPicked ? "" : r.ok ? " on" + (r.unsure.length ? " maybe" : "") : " out");
+      const card = el("div", { class: cls }, el("div", { class: "pic" }, pic(info.image, "", r.s.name)), el("div", { class: "name", text: r.s.name }));
+      if (info.species) card.append(el("div", { class: "sub", text: info.species }));
+      grid.append(card);
+    });
+
+    const note = $("culpritNote");
+    if (anyPicked && alive.length === 0) {
       const best = Math.min(...results.map((r) => r.missing.length));
-      const close = results.filter((r) => r.missing.length === best).map((r) => r.s.name).join(", ");
-      culprit.append(answer("No suspect matches", "Check your clues", "warn", "Closest: " + close + ". A clue may be mis-ticked, or missing from this year's data."));
+      note.textContent = "No suspect matches those clues. Double-check what you ticked. Closest: " + results.filter((r) => r.missing.length === best).map((r) => r.s.name).join(", ") + ".";
+      note.hidden = false;
+    } else if (alive.length === 1 && alive[0].unsure.length) {
+      note.textContent = "This match relies on a clue marked as uncertain (" + alive[0].unsure.map((id) => state.data.clues[id].label).join(", ") + ").";
+      note.hidden = false;
+    } else note.hidden = true;
+
+    /* clues selected line */
+    const line = $("selectedLine");
+    line.replaceChildren();
+    if (anyPicked) {
+      const names = state.data.categories.filter((c) => c.kind !== "weapon").flatMap((c) => c.clues).filter((c) => state.selected.has(c.id)).map((c) => (c.hint || c.label).toUpperCase());
+      line.append(el("b", { text: "Clues selected: " }), document.createTextNode(names.join(", ")));
     }
 
-    const weapon = $("weapon");
-    weapon.replaceChildren();
-    const wc = [...state.selected].map((id) => state.data.clues[id]).find((c) => c && isWeaponClue(c.id));
-    if (!state.data.categories.some((c) => c.kind === "weapon")) {
-      /* no weapon clues in this data set */
-    } else if (wc) {
-      weapon.append(answer("The weapon is…", wc.weapon || "(weapon not listed)", wc.weapon ? "found" : "warn", "From weapon clue: " + wc.label));
-    } else {
-      weapon.append(answer("The weapon is…", "Pick a weapon clue", "", ""));
-    }
-
-    const list = $("suspectList");
-    list.replaceChildren();
-    results
-      .sort((a, b) => a.missing.length - b.missing.length)
-      .forEach((r) => {
-        const li = el("li", { class: anyPicked ? (r.ok ? "in" : "out") : "" });
-        const tag = !anyPicked ? "" : r.ok ? (r.unsure.length ? "possible ⚠" : "matches") : "ruled out";
-        const nameRow = el("div", { class: "name" }, el("span", { text: r.s.name }));
-        if (tag) nameRow.append(el("span", { class: "tag " + (r.ok ? (r.unsure.length ? "warn" : "in") : ""), text: tag }));
-        li.append(nameRow);
-        if (anyPicked && !r.ok) li.append(el("div", { class: "why", text: "Doesn't have: " + r.missing.map(lbl).join(", ") }));
-        if (anyPicked && r.ok && r.unsure.length) li.append(el("div", { class: "why", text: "Uncertain on: " + r.unsure.map(lbl).join(", ") }));
-        list.append(li);
-      });
-  }
-  const lbl = (id) => state.data.clues[id].label;
-  function answer(label, big, cls, note) {
-    const d = el("div", { class: "answer " + cls }, el("div", { class: "label", text: label }), el("div", { class: "big", text: big }));
-    if (note) d.append(el("p", { text: note }));
-    return d;
+    /* weapons */
+    const weaponClues = state.data.categories.filter((c) => c.kind === "weapon").flatMap((c) => c.clues);
+    const chosen = weaponClues.find((c) => state.selected.has(c.id));
+    const names = [...new Set(weaponClues.map((c) => c.weapon).filter(Boolean))];
+    $("weaponPanel").hidden = names.length === 0;
+    const wGrid = $("weaponGrid");
+    wGrid.replaceChildren();
+    ordered(names, assets.weaponOrder, (n) => n).forEach((n) => {
+      const on = chosen && chosen.weapon === n;
+      const cls = "card weapon" + (on ? " on" : "");
+      wGrid.append(el("div", { class: cls }, el("div", { class: "pic" }, pic((assets.weapons || {})[n], "", n)), el("div", { class: "name", text: n })));
+    });
   }
 
   function showNotice(msg, error) {
@@ -187,23 +169,10 @@
 
   /* ---------- storage (per-year, optional) ---------- */
   const key = () => "hh-solver-" + state.year;
-  function save() { if (state.custom) return; try { localStorage.setItem(key(), JSON.stringify([...state.selected])); } catch (e) {} }
+  function save() { try { localStorage.setItem(key(), JSON.stringify([...state.selected])); } catch (e) {} }
   function load() { try { return new Set(JSON.parse(localStorage.getItem(key()) || "[]")); } catch (e) { return new Set(); } }
 
   /* ---------- loading ---------- */
-  function show(data, meta, custom) {
-    state.data = data; state.custom = !!custom;
-    state.selected = custom ? new Set() : load();
-    [...state.selected].forEach((id) => { if (!data.clues[id]) state.selected.delete(id); });
-    $("subtitle").textContent = (meta && meta.title) || "Check the clues you found. The culprit and weapon appear on the right.";
-    const hasData = data.suspects.some((s) => s.has.size > 0);
-    if (!hasData) {
-      showNotice((meta && meta.year ? meta.year + " " : "") + "clues haven't been added yet. Fill in the CSV in data/ (see the README), or switch years above.");
-    } else if (meta && meta.note) showNotice(meta.note); else showNotice("");
-    $("app").querySelector(".layout").style.display = "";
-    renderClues(); renderResults();
-  }
-
   async function loadYear(year) {
     const meta = state.years.find((y) => String(y.year) === String(year));
     if (!meta) return;
@@ -211,7 +180,20 @@
     try {
       const res = await fetch(meta.file, { cache: "no-cache" });
       if (!res.ok) throw new Error("Could not load " + meta.file + " (" + res.status + ")");
-      show(buildData(parseCSV(await res.text())), meta, false);
+      const data = buildData(parseCSV(await res.text()));
+      let assets = {};
+      if (meta.assets) {
+        try { const r = await fetch(meta.assets, { cache: "no-cache" }); if (r.ok) assets = await r.json(); } catch (e) { /* images are optional */ }
+      }
+      state.data = data; state.assets = assets;
+      state.selected = load();
+      [...state.selected].forEach((id) => { if (!data.clues[id]) state.selected.delete(id); });
+      document.querySelector(".clues-head p").textContent = assets.intro || "Select every clue you were given.";
+      showNotice(data.suspects.some((s) => s.has.size > 0) ? "" : meta.year + " is still being filled in. Suspect matches will show up once clues are confirmed.");
+      const up = $("updated"), d = meta.updated ? new Date(meta.updated) : null;
+      up.hidden = !d || isNaN(d);
+      if (!up.hidden) up.textContent = "Last updated " + d.toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short", timeZoneName: "short" });
+      renderClues(); renderResults();
     } catch (e) { showNotice(e.message, true); }
   }
 
@@ -227,16 +209,8 @@
     sel.value = start;
     sel.addEventListener("change", () => loadYear(sel.value));
     $("resetBtn").addEventListener("click", () => { state.selected.clear(); save(); renderClues(); renderResults(); });
-    $("uploadInput").addEventListener("change", (ev) => {
-      const f = ev.target.files[0]; if (!f) return;
-      const r = new FileReader();
-      r.onload = () => {
-        try { show(buildData(parseCSV(String(r.result))), { title: "Custom file: " + f.name, note: "Showing your uploaded file. Nothing is saved or published." }, true); }
-        catch (e) { showNotice("Couldn't read that CSV: " + e.message, true); }
-      };
-      r.readAsText(f); ev.target.value = "";
-    });
     loadYear(start);
+    window.HH.renderNav("nav");
   }
   init();
 })();
