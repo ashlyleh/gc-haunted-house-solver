@@ -89,7 +89,9 @@
       const exclusive = cat.kind !== "normal";
       const head = el("div", { class: "group-head" }, el("h3", { text: cat.name }));
       if (notes[cat.name]) head.append(el("p", { text: notes[cat.name] }));
-      const chips = el("div", { class: "chips" });
+      /* pick a column count that fills the rows evenly: 2->2, 3->3, 4->2x2, 6->3x2 */
+      const n = cat.clues.length, cols = n <= 3 ? n : n % 3 === 0 ? 3 : n % 2 === 0 ? 2 : 3;
+      const chips = el("div", { class: "chips", style: "--cols:" + cols });
       cat.clues.forEach((cl) => {
         const input = el("input", { type: "checkbox", value: cl.id });
         input.checked = state.selected.has(cl.id);
