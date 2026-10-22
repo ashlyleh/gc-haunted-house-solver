@@ -11,7 +11,7 @@ Plain HTML/CSS/JS, no build step.
 Test locally: `python3 -m http.server` in this folder, then open http://localhost:8000.
 (Opening `index.html` by double-click won't load data; the browser blocks it.)
 
-## Add this year's clues (2026)
+## Fill in the 2026 suspects
 1. Open `templates/blank-template.csv` in Google Sheets or Excel.
 2. Fill it in (format below). Export as CSV.
 3. Replace `data/2026.csv` with it and commit.
@@ -22,33 +22,21 @@ Rows 1-4 describe the clues. One column per clue.
 
 | Column A | What the row holds |
 |---|---|
-| `category` | Group name per clue (Anagrams, Fabrics, ...). Any name with **"final"** = pick-one final clues. Any name with **"weapon"** = weapon clues. |
+| `category` | Group name per clue (Anagrams, Fabrics, ...). Any name with **"final"** or **"unique"** = pick-one clues. Any name with **"weapon"** = weapon clues. |
 | `clue` | The clue's name |
 | `hint` | Optional small text, like the scrambled anagram |
 | `weapon` | Weapon clues only: the weapon that clue points to |
 
 Every row after that is one suspect: name in column A, then `X` under each clue that suspect has.
 Use `?` if you're not sure. It still counts as a match but is flagged as uncertain.
-Final clues: put `X` under that suspect's final clue only.
-
-## Notes on the 2025 data
-Your three sheets disagreed in places. I used the **Clue Quick Guide** as the source of truth.
-The Suspect Calculator differed for:
-- **Mr. Chipper**: calculator has Stitching (no Neopet) and Rope (no Pointy Tooth). Guide has Neopet and Pointy Tooth.
-- **Lady Frostbite**: calculator also gives her Rope. Guide doesn't.
-
-Also fixed: "Beard Coam" to "Beard Comb", and the Neopet anagram to `PEENTO` (the Quick Guide and Calculator had `PENNTO`).
-If the calculator was right, edit `data/2025.csv`.
+Pick-one clues (unique/final): put `X` under that suspect's own clue only.
 
 ## Images
-Images live in `data/<year>.assets.json` (suspect photo + species, clue icons, weapon images, display order).
-For a new year, copy `data/2025.assets.json`, swap the URLs, and add `"assets": "data/2026.assets.json"` to that year's line in `data/years.json`.
-Clue icons are matched by the clue name in the CSV, so spell them the same.
+Images live in `data/2026.assets.json`: clue icons (matched by the clue name in the CSV), suspect photo + species, and weapon images.
+A missing image shows a grey circle with the first letter, so you can add them one at a time.
 
-## Buttons + Past Prizes
-The button row above the solver comes from `data/nav.json`.
-- **Add a link:** add `{ "label": "...", "url": "..." }` to `links`.
-- **Add a past-prizes year:** save the prizes as `data/prizes/<year>.csv` (columns: `Type, Image URL, Name, Nipots Cost, URL`), then change that year's line in `prizes` from `{ "year": 2023, "soon": true }` to `{ "year": 2023, "file": "data/prizes/2023.csv" }`.
+## Buttons
+The button row above the solver comes from `data/nav.json`. Add `{ "label": "...", "url": "..." }` to `links`.
 
 ## "Last updated" note
 Shown under the contact line for the selected year. To change it, edit that year's `"updated"` value in `data/years.json`, e.g. `"2026-10-18T09:30:00-05:00"` (the `-05:00` is Central Daylight Time; use `-06:00` after clocks fall back in November).

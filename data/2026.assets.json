@@ -1,16 +1,80 @@
 {
   "intro": "Select every clue you were given. For full credits make sure you collect a clue each day!",
   "categoryNotes": {
-    "Final Clues": "This is the last clue you should receive on the final day. This should help confirm the suspect.",
     "Weapons": "This clue should narrow down the weapon used by your suspect, this doesn't usually relate to the suspect."
   },
-  "clueIcons": {
-    "Enormous Toenail": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/uniqueclue_enormoustoenail.png",
-    "Wheel Shards": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/uniqueClue_wheelShards.png",
-    "Baking Soda": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/weaponClue_bakingSoda.png",
-    "Brown Hair": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/clue_brownhair.png",
-    "Shoe Prints": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/clue_shoeprints.png"
+  "categoryIcons": {
+    "Anagrams": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/letter.png"
   },
-  "suspects": {},
-  "weapons": {}
+  "suspectOrder": [
+    "Sabre-X",
+    "Lani the Magma Faerie",
+    "Plesio",
+    "Myncha",
+    "Pacha",
+    "Usugga the Ugga Spa Concierge"
+  ],
+  "suspects": {
+    "Sabre-X": {
+      "image": "https://grundoscafe.b-cdn.net/events/hauntedhouse/guests/suspect_sabrex.png",
+      "species": "Orig the Great"
+    },
+    "Lani the Magma Faerie": {
+      "image": "https://grundoscafe.b-cdn.net/events/hauntedhouse/guests/suspect_magmafaerie.png",
+      "species": "Korbat Scientist"
+    },
+    "Plesio": {
+      "image": "https://grundoscafe.b-cdn.net/events/hauntedhouse/guests/suspect_plesio.png",
+      "species": "Lair Beast"
+    },
+    "Myncha": {
+      "image": "https://grundoscafe.b-cdn.net/events/hauntedhouse/guests/suspect_myncha.png",
+      "species": "King Skarl"
+    },
+    "Pacha": {
+      "image": "https://grundoscafe.b-cdn.net/events/hauntedhouse/guests/suspect_pacha.png",
+      "species": "Lab Scientist"
+    },
+    "Usugga the Ugga Spa Concierge": {
+      "image": "https://grundoscafe.b-cdn.net/events/hauntedhouse/guests/suspect_spausul.png",
+      "species": "Gilly"
+    }
+  },
+  "clueIcons": {
+    "Black Fabric Scrap": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/clue_blackFabric.png",
+    "Blue Fabric Scrap": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/clue_bluefabricscrap.png",
+    "Red Fabric Scrap": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/clue_redfabricscrap.png",
+    "White Fabric Scrap": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/clue_whiteFabric.png",
+    "Brown Hair": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/clue_brownhair.png",
+    "Dull Hair": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/clue_dullHair.png",
+    "White Hair": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/clue_whitehair.png",
+    "String": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/clue_string.png",
+    "Swirly Lens": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/clue_swirlyLens.png",
+    "Shoe Prints": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/clue_shoeprints.png",
+    "Red Makeup Smudge": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/clue_redMakeup.png",
+    "Enormous Toenail": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/uniqueclue_enormoustoenail.png",
+    "Wheel Shard": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/uniqueClue_wheelShards.png",
+    "Baking Soda": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/weaponClue_bakingSoda.png",
+    "Volcanic Glass": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/weaponClue_volcanicGlass.png",
+    "Sludge": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/weaponClue_sludge.png",
+    "Seaweed": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/weaponClue_seaweed.png",
+    "Tiny Cape": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/weaponClue_tinycape.png",
+    "Pile of Soot": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/weaponClue_sootPile.png"
+  },
+  "weapons": {
+    "Mining Pan": "https://grundoscafe.b-cdn.net/items/mining_pan.gif",
+    "Volcano Activity Set": "https://grundoscafe.b-cdn.net/items/volcanoset.gif",
+    "Super Attack Pebble": "https://grundoscafe.b-cdn.net/items/superattackpebble.gif",
+    "Obsidian Scorchstone": "https://grundoscafe.b-cdn.net/items/obssco.gif",
+    "Trident of Seafury": "https://grundoscafe.b-cdn.net/items/volcanotrident.gif",
+    "Infernal Sword": "https://grundoscafe.b-cdn.net/items/flamesword.gif"
+  },
+  "weaponOrder": [
+    "Mining Pan",
+    "Volcano Activity Set",
+    "Super Attack Pebble",
+    "Obsidian Scorchstone",
+    "Trident of Seafury",
+    "Infernal Sword"
+  ]
 }

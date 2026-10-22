@@ -26,7 +26,7 @@
       const catName = meta.category[col] || "Other";
       if (!byName[catName]) {
         const low = catName.toLowerCase();
-        const cat = { name: catName, kind: low.includes("weapon") ? "weapon" : low.includes("final") ? "final" : "normal", clues: [] };
+        const cat = { name: catName, kind: low.includes("weapon") ? "weapon" : (low.includes("final") || low.includes("unique")) ? "final" : "normal", clues: [] };
         byName[catName] = cat; categories.push(cat);
       }
       const clue = { id: "c" + col, label, cat: byName[catName], hint: (meta.hint && meta.hint[col]) || "", weapon: (meta.weapon && meta.weapon[col]) || "" };
@@ -116,6 +116,8 @@
     const results = solve();
     const picked = [...state.selected].filter((id) => !isWeaponClue(id));
     const anyPicked = picked.length > 0;
+    /* until suspects have clue data, never rule anyone out */
+    const judge = anyPicked && state.data.suspects.some((s) => s.has.size > 0);
     const alive = results.filter((r) => r.ok);
     const assets = A();
 
@@ -124,14 +126,14 @@
     grid.replaceChildren();
     ordered(results, assets.suspectOrder, (r) => r.s.name).forEach((r) => {
       const info = (assets.suspects || {})[r.s.name] || {};
-      const cls = "card" + (!anyPicked ? "" : r.ok ? " on" + (r.unsure.length ? " maybe" : "") : " out");
+      const cls = "card" + (!judge ? "" : r.ok ? " on" + (r.unsure.length ? " maybe" : "") : " out");
       const card = el("div", { class: cls }, el("div", { class: "pic" }, pic(info.image, "", r.s.name)), el("div", { class: "name", text: r.s.name }));
       if (info.species) card.append(el("div", { class: "sub", text: info.species }));
       grid.append(card);
     });
 
     const note = $("culpritNote");
-    if (anyPicked && alive.length === 0) {
+    if (judge && alive.length === 0) {
       const best = Math.min(...results.map((r) => r.missing.length));
       note.textContent = "No suspect matches those clues. Double-check what you ticked. Closest: " + results.filter((r) => r.missing.length === best).map((r) => r.s.name).join(", ") + ".";
       note.hidden = false;
@@ -191,8 +193,13 @@
       document.querySelector(".clues-head p").textContent = assets.intro || "Select every clue you were given.";
       showNotice(data.suspects.some((s) => s.has.size > 0) ? "" : meta.year + " is still being filled in. Suspect matches will show up once clues are confirmed.");
       const up = $("updated"), d = meta.updated ? new Date(meta.updated) : null;
-      up.hidden = !d || isNaN(d);
-      if (!up.hidden) up.textContent = "Last updated " + d.toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short", timeZoneName: "short" });
+      up.hidden = true;
+      try {
+        if (d && !isNaN(d)) {
+          up.textContent = "Last updated " + d.toLocaleString(undefined, { year: "numeric", month: "short", day: "numeric", hour: "numeric", minute: "2-digit", timeZoneName: "short" });
+          up.hidden = false;
+        }
+      } catch (e) { /* the note is optional; never let it block the page */ }
       renderClues(); renderResults();
     } catch (e) { showNotice(e.message, true); }
   }
@@ -207,6 +214,7 @@
     const params = new URLSearchParams(location.search);
     const start = params.get("year") || (state.years.find((y) => y.default) || state.years[0]).year;
     sel.value = start;
+    sel.parentElement.hidden = state.years.length < 2;
     sel.addEventListener("change", () => loadYear(sel.value));
     $("resetBtn").addEventListener("click", () => { state.selected.clear(); save(); renderClues(); renderResults(); });
     loadYear(start);

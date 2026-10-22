@@ -32,8 +32,8 @@
     return n;
   };
 
-  /* Buttons above the solver: external links + one button per past-prizes year */
-  async function renderNav(hostId, currentPrizeYear) {
+  /* Buttons above the solver: external links from data/nav.json */
+  async function renderNav(hostId) {
     const host = document.getElementById(hostId);
     if (!host) return;
     let nav;
@@ -41,18 +41,9 @@
     host.replaceChildren();
 
     const links = el("div", { class: "nav-group" });
-    if (document.body.dataset.page === "prizes") links.append(el("a", { class: "nav-btn", href: "index.html", text: "Solver" }));
     (nav.links || []).forEach((l) => links.append(el("a", { class: "nav-btn", href: l.url, target: "_blank", rel: "noopener", text: l.label })));
     host.append(links);
 
-    if ((nav.prizes || []).length) {
-      const g = el("div", { class: "nav-group" }, el("span", { class: "nav-label", text: nav.prizesLabel || "Past Prizes" }));
-      nav.prizes.forEach((p) => {
-        if (p.soon) g.append(el("span", { class: "nav-btn soon", title: "Coming soon", "aria-disabled": "true", text: p.year }));
-        else g.append(el("a", { class: "nav-btn" + (String(p.year) === String(currentPrizeYear) ? " current" : ""), href: "prizes.html?year=" + p.year, text: p.year }));
-      });
-      host.append(g);
-    }
   }
 
   window.HH = { parseCSV, el, renderNav };
