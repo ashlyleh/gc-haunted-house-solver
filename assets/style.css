@@ -120,8 +120,8 @@ body{margin:0;background:var(--bg);color:var(--cream);font-family:var(--sans);fo
 
 /*  CHECK MARK ON PICKED CLUES (so selection isn't shown by colour alone)  */
 .chip input:checked + .chip-body::after{
-  content:"\2713";position:absolute;top:6px;right:8px;width:22px;height:22px;border-radius:50%;
-  display:grid;place-items:center;font:700 .9rem/1 var(--sans);background:var(--orange);color:#1b0f00;
+  content:"\2713";position:absolute;top:-10px;right:-10px;width:26px;height:26px;border-radius:50%;box-shadow:0 0 0 3px var(--panel-deep);
+  display:grid;place-items:center;font:700 1rem/1 var(--sans);background:var(--orange);color:#1b0f00;
 }
 
 /* 📣  NOTICE  📣 */

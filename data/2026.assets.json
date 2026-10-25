@@ -59,7 +59,11 @@
     "Sludge": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/weaponClue_sludge.png",
     "Seaweed": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/weaponClue_seaweed.png",
     "Tiny Cape": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/weaponClue_tinycape.png",
-    "Pile of Soot": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/weaponClue_sootPile.png"
+    "Pile of Soot": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/weaponClue_sootPile.png",
+    "Bone Shards": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/uniqueClue_boneShards.png",
+    "Small Pencil": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/uniqueClue_pencil.png",
+    "Fake Gems": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/uniqueClue_fakeGems.png",
+    "Scrambled Eggs": "https://grundoscafe.b-cdn.net/events/hauntedhouse/clues/uniqueClue_eggs.png"
   },
   "weapons": {
     "Mining Pan": "https://grundoscafe.b-cdn.net/items/mining_pan.gif",
